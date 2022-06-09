@@ -10,7 +10,7 @@ document_app = Blueprint("document_app", __name__)
 @document_app.route("/documents", methods=["GET"])
 def getAllDocuments():
     if request.method=="GET":
-        if session["loged_in"]:
+        if session.get("loged_in"):
             user_id = session["user_id"]
             cur_user = User.query.get(user_id)
             response = {
@@ -24,7 +24,7 @@ def getAllDocuments():
 @document_app.route("/documents/new", methods=["POST"])
 def newDocument():
     if request.method=="POST":
-        if session["loged_in"]:
+        if session.get("loged_in"):
             data = request.json
             if "document_name" in data:
                 user_id = session["user_id"]
@@ -40,7 +40,7 @@ def newDocument():
 
 @document_app.route("/document/<doc_id>", methods=["GET"])
 def getDocument(doc_id):
-    if session["loged_in"]:
+    if session.get("loged_in"):
         if request.method=="GET":
             document = Document.query.get_or_404(doc_id)
             if document:
@@ -55,7 +55,7 @@ def getDocument(doc_id):
 def rename_document(doc_id):
     if request.method=="POST":
         data = request.json
-        if session["loged_in"]:
+        if session.get("loged_in"):
             if "name" in data:
                 name = data.get("name")
                 document = Document.query.get_or_404(doc_id)
@@ -75,7 +75,7 @@ def rename_document(doc_id):
 def save_document(doc_id):
     if request.method=="POST":
         data = request.json
-        if session["loged_in"]:
+        if session.get("loged_in"):
             if "content" in data:
                 content = data.get("content")
                 document = Document.query.get_or_404(doc_id)
@@ -95,7 +95,7 @@ def save_document(doc_id):
 @document_app.route("/document/delete/<doc_id>", methods=["DELETE"])
 def delete_document(doc_id):
         if request.method=="DELETE":
-            if session["loged_in"]:
+            if session.get("loged_in"):
                 document = Document.query.get_or_404(doc_id)
                 if document:
                     document.delete()
